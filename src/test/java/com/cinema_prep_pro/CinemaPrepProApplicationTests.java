@@ -1,4 +1,4 @@
-package com.vpkeditzz.cinema_prep_pro;
+package com.cinema_prep_pro;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
