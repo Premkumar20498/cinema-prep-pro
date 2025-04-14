@@ -6,20 +6,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectDetails {
+public class SceneDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    String projectId;
+    String sceneId;
 
-    String projectName;
+    String sceneNo;
 
-    String projectDescription;
+    String sceneDescription;
+
+    String locationType;
+
+    String location;
 
     String createdBy;
 

@@ -28,10 +28,10 @@ public class ProjectDetailsController {
         return projectDetailsService.createNewProject(projectDetails);
     }
 
-    @PatchMapping("{project_id}")
-    public ResponseEntity<ProjectDetails> updateProject(@PathVariable("project_id") String projectId, @RequestBody Map<String, Object> updateDetails)
+    @PatchMapping("update")
+    public ResponseEntity<ProjectDetails> updateProject(@RequestBody Map<String, String> updateDetails)
     {
-        return projectDetailsService.updateProject(projectId, updateDetails);
+        return projectDetailsService.updateProject(updateDetails);
     }
 
     @DeleteMapping("{project_id}")
