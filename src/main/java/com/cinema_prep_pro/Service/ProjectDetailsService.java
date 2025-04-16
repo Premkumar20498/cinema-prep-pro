@@ -1,7 +1,10 @@
 package com.cinema_prep_pro.Service;
 
 import com.cinema_prep_pro.Entity.ProjectDetails;
+import com.cinema_prep_pro.Entity.SceneDetails;
+import com.cinema_prep_pro.Entity.ShotDetails;
 import com.cinema_prep_pro.Repository.ProjectDetailsRepository;
+import com.cinema_prep_pro.Requests.ProjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +37,7 @@ public class ProjectDetailsService {
         }
     }
 
-    public ResponseEntity<ProjectDetails> createNewProject(ProjectDetails projectDetails) {
+    public ResponseEntity<ProjectDetails> createNewProject(ProjectRequest projectDetails) {
         try {
             int projectNumber = 0;
             ProjectDetails projectToBeAdded = new ProjectDetails();
@@ -50,8 +53,7 @@ public class ProjectDetailsService {
             projectToBeAdded.setProjectDescription(projectDetails.getProjectDescription());
             projectToBeAdded.setCreatedOn(LocalDateTime.now());
             projectToBeAdded.setCreatedBy(projectDetails.getCreatedBy());
-            projectToBeAdded.setUpdatedBy(null);
-            projectToBeAdded.setUpdatedOn(null);
+
             return new ResponseEntity<>(projectDetailsRepository.save(projectToBeAdded), HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();

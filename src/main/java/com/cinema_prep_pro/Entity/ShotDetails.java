@@ -1,9 +1,6 @@
 package com.cinema_prep_pro.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +15,7 @@ public class ShotDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     String shotId;
 
-    String shotNumber;
+    String shotNo;
 
     String shotDescription;
 
@@ -31,4 +28,8 @@ public class ShotDetails {
     String subject;
 
     String estTime;
+
+    @ManyToOne
+    @JoinColumn(name = "scene_id")
+    SceneDetails sceneDetails;
 }

@@ -1,7 +1,10 @@
 package com.cinema_prep_pro.Service;
 
+import com.cinema_prep_pro.Entity.SceneDetails;
 import com.cinema_prep_pro.Entity.ShotDetails;
+import com.cinema_prep_pro.Repository.SceneDetailsRepository;
 import com.cinema_prep_pro.Repository.ShotDetailsRepository;
+import com.cinema_prep_pro.Requests.ShotRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +14,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class ShotDetailsService {
 
     @Autowired
     ShotDetailsRepository shotDetailsRepository;
+
+    @Autowired
+    SceneDetailsRepository sceneDetailsRepository;
 
     public ResponseEntity<List<ShotDetails>> getAllShots() {
         try
@@ -29,9 +36,21 @@ public class ShotDetailsService {
         }
     }
 
-    public ResponseEntity<ShotDetails> createNewShot(ShotDetails shotDetails) {
+    public ResponseEntity<ShotDetails> createNewShot(ShotRequest shotDetailsFromRequest) {
         try
         {
+            ShotDetails shotDetails = new ShotDetails();
+            SceneDetails sceneDetail = sceneDetailsRepository.findById(shotDetailsFromRequest.getSceneId()).orElseThrow(()-> new NoSuchElementException("Scene Id Not Found"));
+
+            shotDetails.setShotNo(shotDetailsFromRequest.getShotNo());
+            shotDetails.setShotDescription(shotDetailsFromRequest.getShotDescription());
+            shotDetails.setShotSize(shotDetailsFromRequest.getShotSize());
+            shotDetails.setShotType(shotDetailsFromRequest.getShotType());
+            shotDetails.setMovement(shotDetailsFromRequest.getMovement());
+            shotDetails.setSubject(shotDetailsFromRequest.getSubject());
+            shotDetails.setEstTime(shotDetailsFromRequest.getEstTime());
+            shotDetails.setSceneDetails(sceneDetail);
+
             return new ResponseEntity<>(shotDetailsRepository.save(shotDetails), HttpStatus.CREATED);
         }
         catch (Exception e)

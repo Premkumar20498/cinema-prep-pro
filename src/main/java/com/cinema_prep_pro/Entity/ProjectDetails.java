@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,4 +30,8 @@ public class ProjectDetails {
     String updatedBy;
 
     LocalDateTime updatedOn;
+
+    @OneToMany(mappedBy = "projectDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "projectDetails")
+    List<SceneDetails> sceneDetails = new ArrayList<>();
 }

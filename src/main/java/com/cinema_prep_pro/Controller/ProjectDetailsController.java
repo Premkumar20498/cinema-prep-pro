@@ -1,6 +1,7 @@
 package com.cinema_prep_pro.Controller;
 
 import com.cinema_prep_pro.Entity.ProjectDetails;
+import com.cinema_prep_pro.Requests.ProjectRequest;
 import com.cinema_prep_pro.Service.ProjectDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ProjectDetailsController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<ProjectDetails> createNewProject(@RequestBody ProjectDetails projectDetails)
+    public ResponseEntity<ProjectDetails> createNewProject(@RequestBody ProjectRequest projectDetails)
     {
         return projectDetailsService.createNewProject(projectDetails);
     }

@@ -1,6 +1,7 @@
 package com.cinema_prep_pro.Controller;
 
 import com.cinema_prep_pro.Entity.SceneDetails;
+import com.cinema_prep_pro.Requests.SceneRequest;
 import com.cinema_prep_pro.Service.SceneDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class SceneDetailsController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<SceneDetails> createNewScene(@RequestBody SceneDetails sceneDetails)
+    public ResponseEntity<SceneDetails> createNewScene(@RequestBody SceneRequest sceneDetails)
     {
         return sceneDetailsService.createNewScene(sceneDetails);
     }

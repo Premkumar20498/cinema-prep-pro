@@ -4,6 +4,7 @@ import com.cinema_prep_pro.Entity.ProjectDetails;
 import com.cinema_prep_pro.Entity.SceneDetails;
 import com.cinema_prep_pro.Repository.ProjectDetailsRepository;
 import com.cinema_prep_pro.Repository.SceneDetailsRepository;
+import com.cinema_prep_pro.Requests.SceneRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class SceneDetailsService {
@@ -44,10 +42,22 @@ public class SceneDetailsService {
         }
     }
 
-    public ResponseEntity<SceneDetails> createNewScene(SceneDetails sceneDetails) {
+    public ResponseEntity<SceneDetails> createNewScene(SceneRequest sceneDetails) {
         try {
-            sceneDetails.setCreatedOn(LocalDateTime.now());
-            return new ResponseEntity<>(sceneDetailsRepository.save(sceneDetails), HttpStatus.CREATED);
+            SceneDetails sceneToBeAdded = new SceneDetails();
+            ProjectDetails projectDetails = projectDetailsRepository.findById(sceneDetails.getProjectId()).orElseThrow(()-> new NoSuchElementException("Project Id not found"));
+
+            sceneToBeAdded.setSceneNo(sceneDetails.getSceneNo());
+            sceneToBeAdded.setSceneDescription(sceneDetails.getSceneDescription());
+            sceneToBeAdded.setLocationType(sceneDetails.getLocationType());
+            sceneToBeAdded.setLocation(sceneDetails.getLocation());
+            sceneToBeAdded.setCreatedBy(sceneDetails.getCreatedBy());
+            sceneToBeAdded.setCreatedOn(LocalDateTime.now());
+            sceneToBeAdded.setProjectDetails(projectDetails);
+
+            sceneDetailsRepository.save(sceneToBeAdded);
+
+            return new ResponseEntity<>(sceneToBeAdded, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

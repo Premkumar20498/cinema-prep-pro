@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -33,4 +34,12 @@ public class SceneDetails {
     String updatedBy;
 
     LocalDateTime updatedOn;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    ProjectDetails projectDetails;
+
+    @OneToMany(mappedBy = "sceneDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "sceneDetails")
+    List<ShotDetails> shotDetails = new ArrayList<>();
 }

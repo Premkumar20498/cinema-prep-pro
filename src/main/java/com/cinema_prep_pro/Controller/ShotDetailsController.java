@@ -1,6 +1,7 @@
 package com.cinema_prep_pro.Controller;
 
 import com.cinema_prep_pro.Entity.ShotDetails;
+import com.cinema_prep_pro.Requests.ShotRequest;
 import com.cinema_prep_pro.Service.ShotDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ShotDetailsController {
     }
 
     @PostMapping("create")
-    ResponseEntity<ShotDetails> createNewShot(@RequestBody ShotDetails shotDetails)
+    ResponseEntity<ShotDetails> createNewShot(@RequestBody ShotRequest shotDetails)
     {
         return shotDetailsService.createNewShot(shotDetails);
     }
