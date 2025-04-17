@@ -42,9 +42,9 @@ public class SceneDetailsService {
         }
     }
 
-    public ResponseEntity<SceneDetails> createNewScene(SceneRequest sceneDetails) {
+    public ResponseEntity<String> createNewScene(SceneRequest sceneDetails) {
+        SceneDetails sceneToBeAdded = new SceneDetails();
         try {
-            SceneDetails sceneToBeAdded = new SceneDetails();
             ProjectDetails projectDetails = projectDetailsRepository.findById(sceneDetails.getProjectId()).orElseThrow(()-> new NoSuchElementException("Project Id not found"));
 
             sceneToBeAdded.setSceneNo(sceneDetails.getSceneNo());
@@ -57,16 +57,18 @@ public class SceneDetailsService {
 
             sceneDetailsRepository.save(sceneToBeAdded);
 
-            return new ResponseEntity<>(sceneToBeAdded, HttpStatus.CREATED);
+            return new ResponseEntity<>("Scene - "+sceneDetails.getSceneNo()+" is created successfully", HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to create the Scene - "+sceneDetails.getSceneNo(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<SceneDetails> updateScene(Map<String, Object> updateDetails) {
+    public ResponseEntity<String> updateScene(Map<String, Object> updateDetails) {
+        String sceneNumber = "";
         try {
             SceneDetails existingScene = sceneDetailsRepository.findById(updateDetails.get("sceneId").toString()).orElseThrow();
+            sceneNumber = existingScene.getSceneNo();
             Field field=null;
             for(Map.Entry<String, Object> entrySet : updateDetails.entrySet())
             {
@@ -75,24 +77,28 @@ public class SceneDetailsService {
                 field.set(existingScene,entrySet.getValue());
             }
             existingScene.setUpdatedOn(LocalDateTime.now());
-            return new ResponseEntity<>(sceneDetailsRepository.save(existingScene),HttpStatus.OK);
+            sceneDetailsRepository.save(existingScene);
+            return new ResponseEntity<>("Scene - "+sceneNumber+" is updated successfully",HttpStatus.OK);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to update the Scene - "+sceneNumber, HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<String> deleteScene(Map<String, String> sceneId) {
+        String sceneNumber = "";
         try{
-            sceneDetailsRepository.deleteById(sceneId.get("sceneId"));
-            return new ResponseEntity<>("Scene Deleted", HttpStatus.OK);
+            String sceneIdToBeDeleted = sceneId.get("sceneId");
+            sceneNumber = sceneDetailsRepository.findById(sceneIdToBeDeleted).orElseThrow(()->new NoSuchElementException("Scene Id not found")).getSceneNo();
+            sceneDetailsRepository.deleteById(sceneIdToBeDeleted);
+            return new ResponseEntity<>("Scene - "+sceneNumber+" Deleted", HttpStatus.OK);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return new ResponseEntity<>("Couldn't delete the Scene - "+sceneId.get("sceneId"),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to delete the Scene - "+sceneNumber,HttpStatus.BAD_REQUEST);
         }
     }
 }

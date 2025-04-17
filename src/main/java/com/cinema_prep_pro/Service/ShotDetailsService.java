@@ -36,10 +36,10 @@ public class ShotDetailsService {
         }
     }
 
-    public ResponseEntity<ShotDetails> createNewShot(ShotRequest shotDetailsFromRequest) {
+    public ResponseEntity<String> createNewShot(ShotRequest shotDetailsFromRequest) {
+        ShotDetails shotDetails = new ShotDetails();
         try
         {
-            ShotDetails shotDetails = new ShotDetails();
             SceneDetails sceneDetail = sceneDetailsRepository.findById(shotDetailsFromRequest.getSceneId()).orElseThrow(()-> new NoSuchElementException("Scene Id Not Found"));
 
             shotDetails.setShotNo(shotDetailsFromRequest.getShotNo());
@@ -50,20 +50,21 @@ public class ShotDetailsService {
             shotDetails.setSubject(shotDetailsFromRequest.getSubject());
             shotDetails.setEstTime(shotDetailsFromRequest.getEstTime());
             shotDetails.setSceneDetails(sceneDetail);
-
-            return new ResponseEntity<>(shotDetailsRepository.save(shotDetails), HttpStatus.CREATED);
+            shotDetailsRepository.save(shotDetails);
+            return new ResponseEntity<>("Shot - "+shotDetailsFromRequest.getShotNo()+" is created successfully", HttpStatus.CREATED);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to create the Shot - "+shotDetailsFromRequest.getShotNo(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<ShotDetails> updateShot(Map<String, String> updateDetails) {
-
+    public ResponseEntity<String> updateShot(Map<String, String> updateDetails) {
+        String shotNumber = "";
         try {
             ShotDetails existingShot = shotDetailsRepository.findById(updateDetails.get("shotId")).orElseThrow();
+            shotNumber = existingShot.getShotNo();
             Field field;
             for(Map.Entry<String, String> entrySet : updateDetails.entrySet())
             {
@@ -71,26 +72,30 @@ public class ShotDetailsService {
                 field.setAccessible(true);
                 field.set(existingShot,entrySet.getValue());
             }
-            return new ResponseEntity<>(shotDetailsRepository.save(existingShot), HttpStatus.OK);
+            shotDetailsRepository.save(existingShot);
+            return new ResponseEntity<>("Shot - "+shotNumber+" is updated successfully", HttpStatus.OK);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unable to update the Shot - "+shotNumber, HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<String> deleteShot(Map<String, String> deleteDetail) {
 
+        String shotNumber = "";
         try
         {
-            shotDetailsRepository.deleteById(deleteDetail.get("shotId"));
-            return new ResponseEntity<>("Shot Deleted", HttpStatus.OK);
+            String shotIdToBeDeleted = deleteDetail.get("shotId");
+            shotNumber = shotDetailsRepository.findById(shotIdToBeDeleted).orElseThrow(()->new NoSuchElementException("Shot not found")).getShotNo();
+            shotDetailsRepository.deleteById(shotIdToBeDeleted);
+            return new ResponseEntity<>("Shot "+shotNumber+" is deleted successfully", HttpStatus.OK);
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return new ResponseEntity<>("Shot not Deleted", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Shot "+shotNumber+" is not deleted", HttpStatus.BAD_REQUEST);
         }
     }
 }

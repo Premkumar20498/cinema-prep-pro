@@ -24,13 +24,13 @@ public class SceneDetailsController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<SceneDetails> createNewScene(@RequestBody SceneRequest sceneDetails)
+    public ResponseEntity<String> createNewScene(@RequestBody SceneRequest sceneDetails)
     {
         return sceneDetailsService.createNewScene(sceneDetails);
     }
 
     @PatchMapping("update")
-    public ResponseEntity<SceneDetails> updateSceneDetail(@RequestBody Map<String, Object> sceneDetail)
+    public ResponseEntity<String> updateSceneDetail(@RequestBody Map<String, Object> sceneDetail)
     {
         return sceneDetailsService.updateScene(sceneDetail);
     }

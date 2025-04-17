@@ -1,5 +1,6 @@
 package com.cinema_prep_pro.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,9 +38,10 @@ public class SceneDetails {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonIgnore
     ProjectDetails projectDetails;
 
     @OneToMany(mappedBy = "sceneDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @OneToMany(mappedBy = "sceneDetails")
     List<ShotDetails> shotDetails = new ArrayList<>();
+
 }

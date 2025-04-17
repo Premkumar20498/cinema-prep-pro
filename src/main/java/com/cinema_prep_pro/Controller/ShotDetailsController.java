@@ -24,13 +24,13 @@ public class ShotDetailsController {
     }
 
     @PostMapping("create")
-    ResponseEntity<ShotDetails> createNewShot(@RequestBody ShotRequest shotDetails)
+    ResponseEntity<String> createNewShot(@RequestBody ShotRequest shotDetails)
     {
         return shotDetailsService.createNewShot(shotDetails);
     }
 
     @PatchMapping("update")
-    ResponseEntity<ShotDetails> updateShot(@RequestBody Map<String, String> updateDetails)
+    ResponseEntity<String> updateShot(@RequestBody Map<String, String> updateDetails)
     {
         return shotDetailsService.updateShot(updateDetails);
     }

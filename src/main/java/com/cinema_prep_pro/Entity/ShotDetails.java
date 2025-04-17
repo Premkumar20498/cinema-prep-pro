@@ -1,5 +1,6 @@
 package com.cinema_prep_pro.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,5 +32,6 @@ public class ShotDetails {
 
     @ManyToOne
     @JoinColumn(name = "scene_id")
+    @JsonIgnore
     SceneDetails sceneDetails;
 }

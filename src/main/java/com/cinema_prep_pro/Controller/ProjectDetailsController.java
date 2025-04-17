@@ -24,19 +24,19 @@ public class ProjectDetailsController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<ProjectDetails> createNewProject(@RequestBody ProjectRequest projectDetails)
+    public ResponseEntity<String> createNewProject(@RequestBody ProjectRequest projectDetails)
     {
         return projectDetailsService.createNewProject(projectDetails);
     }
 
     @PatchMapping("update")
-    public ResponseEntity<ProjectDetails> updateProject(@RequestBody Map<String, String> updateDetails)
+    public ResponseEntity<String> updateProject(@RequestBody Map<String, String> updateDetails)
     {
         return projectDetailsService.updateProject(updateDetails);
     }
 
-    @DeleteMapping("{project_id}")
-    public ResponseEntity<String> deleteProject(@PathVariable("project_id") String projectId)
+    @DeleteMapping("delete")
+    public ResponseEntity<String> deleteProject(@RequestBody Map<String,String> projectId)
     {
         return projectDetailsService.deleteProject(projectId);
     }

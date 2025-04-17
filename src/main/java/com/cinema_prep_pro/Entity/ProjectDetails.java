@@ -32,6 +32,5 @@ public class ProjectDetails {
     LocalDateTime updatedOn;
 
     @OneToMany(mappedBy = "projectDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @OneToMany(mappedBy = "projectDetails")
     List<SceneDetails> sceneDetails = new ArrayList<>();
 }
